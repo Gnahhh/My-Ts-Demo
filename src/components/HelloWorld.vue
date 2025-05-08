@@ -9,7 +9,7 @@ defineProps<{
     <h2>{{ msg }}</h2>
     <p>
       这是一个手动搭建的Vue 3 + Vite + TypeScript项目
-      <br>
+      <br />
       没有使用任何脚手架工具
     </p>
   </div>

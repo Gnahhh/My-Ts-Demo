@@ -1,0 +1,15 @@
+# http://editorconfig.org
+
+root = true
+
+[*] #表示所有文件生效
+charset = utf-8 #设置字符集
+indent_size = 2 #缩进大小
+indent_style = tab #缩进风格
+end_of_line = lf #控制换行类型
+trim_trailing_whitespace = true #去除末尾的空格
+insert_final_newline = true #末尾始终插入一行
+
+[*.md] #md文件
+max_line_length = off
+trim_trailing_whitespace = false
