@@ -6,5 +6,8 @@ module.exports = {
 	trailingComma: 'none',
 	printWidth: 100,
 	arrowParens: 'avoid',
-	endOfLine: 'lf'
+	endOfLine: 'lf',
+	importOrder: null,
+	importOrderSeparation: false,
+	importOrderSortSpecifiers: false
 };

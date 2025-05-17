@@ -14,7 +14,14 @@ export default [
 			prettier: prettierPlugin
 		},
 		rules: {
-			'prettier/prettier': 'error'
+			'prettier/prettier': 'error',
+			// 禁用 Prettier 的属性换行设置
+			'prettier/prettier': [
+				'error',
+				{
+					singleAttributePerLine: false
+				}
+			]
 		}
 	},
 	// 添加TypeScript特定配置
