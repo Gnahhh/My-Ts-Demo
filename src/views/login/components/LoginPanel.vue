@@ -1,20 +1,43 @@
 <script lang="ts" setup>
-import { ref, reactive } from 'vue';
-import type { FormRules } from 'element-plus';
+import { ref, watch } from 'vue';
 
 import AccountIn from './AccountIn.vue';
 import PhoneIn from './PhoneIn.vue';
 
 // 切换登录方式
 const activeName = ref('account');
-const handleClick = (tab: any, event: Event) => {
-	console.log(tab, event);
-};
 
 // 记住密码
-const isRemPsd = ref([]);
+const isRemPsd = ref(false);
 
 // 登录
+const handleLogin = () => {
+	if (activeName.value === 'account') {
+		// 账号登录
+		// console.log('账号登录');
+		// console.log(isRemPsd.value);
+		// 获取账号和密码
+	} else {
+		// 手机登录
+		// console.log(isRemPsd.value);
+		// console.log('手机登录');
+		// 获取手机号和验证码
+	}
+};
+
+// 过度动画实现
+const transitionDirection = ref('next');
+
+// 监听标签页变化，决定动画方向
+watch(activeName, (newValue, oldValue) => {
+	if (newValue === 'phone' && oldValue === 'account') {
+		// 从账号登录切换到手机登录 - 向前
+		transitionDirection.value = 'next';
+	} else {
+		// 从手机登录切换回账号登录 - 向后
+		transitionDirection.value = 'prev';
+	}
+});
 </script>
 
 <template>
@@ -22,7 +45,7 @@ const isRemPsd = ref([]);
 		<h1 class="title">后台管理系统</h1>
 		<!-- 切换账号模块 -->
 		<div class="change-login">
-			<el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+			<el-tabs v-model="activeName" class="demo-tabs">
 				<el-tab-pane label="账号登录" name="account">
 					<template #label>
 						<span class="custom-tabs-label">
@@ -30,7 +53,6 @@ const isRemPsd = ref([]);
 							<span>账号登录</span>
 						</span>
 					</template>
-					<AccountIn />
 				</el-tab-pane>
 				<el-tab-pane label="手机登录" name="phone">
 					<template #label>
@@ -39,19 +61,26 @@ const isRemPsd = ref([]);
 							<span>手机登录</span>
 						</span>
 					</template>
-					<PhoneIn />
 				</el-tab-pane>
 			</el-tabs>
+
+			<!-- 添加动态组件和过渡效果 -->
+			<div class="form-container">
+				<Transition
+					:name="transitionDirection === 'next' ? 'slide-next' : 'slide-prev'"
+					mode="out-in"
+				>
+					<component :is="activeName === 'account' ? AccountIn : PhoneIn" :key="activeName" />
+				</Transition>
+			</div>
 		</div>
 		<!-- 记住密码 -->
 		<div class="remeber-box">
-			<el-checkbox-group v-model="isRemPsd">
-				<el-checkbox label="记住密码" value="" />
-			</el-checkbox-group>
+			<el-checkbox label="记住密码" v-model="isRemPsd" />
 			<el-link type="primary">忘记密码</el-link>
 		</div>
 		<!-- 登录 -->
-		<div class="login-btn">
+		<div class="login-btn" @click="handleLogin">
 			<el-button type="primary">登录</el-button>
 		</div>
 	</div>
@@ -96,6 +125,40 @@ const isRemPsd = ref([]);
 
 		// 表单样式
 		.login-table {
+			padding: @spacing-md 0;
+		}
+
+		/* 添加动画样式 */
+		.slide-next-enter-active,
+		.slide-next-leave-active,
+		.slide-prev-enter-active,
+		.slide-prev-leave-active {
+			transition: all 0.2s ease;
+		}
+
+		.slide-next-enter-from {
+			opacity: 0;
+			transform: translateX(30px);
+		}
+
+		.slide-next-leave-to {
+			opacity: 0;
+			transform: translateX(-30px);
+		}
+
+		.slide-prev-enter-from {
+			opacity: 0;
+			transform: translateX(-30px);
+		}
+
+		.slide-prev-leave-to {
+			opacity: 0;
+			transform: translateX(30px);
+		}
+
+		/* 确保表单容器正确定位 */
+		.form-container {
+			position: relative;
 			padding: @spacing-md 0;
 		}
 	}

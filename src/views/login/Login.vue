@@ -5,8 +5,6 @@ import LoginPane from './components/LoginPanel.vue';
 <template>
 	<div class="login">
 		<LoginPane />
-		<!-- <h1>login</h1> -->
-		<!-- <div class="in" style="margin: 20px">111</div> -->
 	</div>
 </template>
 
