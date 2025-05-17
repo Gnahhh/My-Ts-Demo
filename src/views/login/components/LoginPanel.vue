@@ -39,7 +39,10 @@ const accountRules: FormRules = {
 // 记住密码
 const isRemPsd = ref([]);
 
-// 规则校验
+
+// 登录
+
+
 </script>
 
 <template>
@@ -101,7 +104,7 @@ const isRemPsd = ref([]);
 		</div>
 		<!-- 登录 -->
 		<div class="login-btn">
-			<el-button type="primary">登录</el-button>
+			<el-button type="primary" >登录</el-button>
 		</div>
 	</div>
 </template>
@@ -131,6 +134,10 @@ const isRemPsd = ref([]);
 		:deep(.el-tabs__nav) {
 			display: flex;
 			width: 100%;
+		}
+
+		:deep(.custom-tabs-label) {
+			display: flex;
 		}
 
 		:deep(.el-tabs__item) {
