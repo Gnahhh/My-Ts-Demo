@@ -16,5 +16,7 @@ import LoginPane from './components/LoginPanel.vue';
 	align-items: center;
 	justify-content: center;
 	height: 100%;
+
+	transform: translateY(-8%);
 }
 </style>
