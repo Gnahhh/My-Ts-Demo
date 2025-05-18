@@ -1,12 +1,14 @@
 <script lang="ts" setup>
-import { reactive } from 'vue';
-import type { FormRules } from 'element-plus';
+import { reactive, ref } from 'vue';
+import type { FormRules, ElForm } from 'element-plus';
 
+// 登录数据
 const accountForm = reactive({
 	phone: '',
 	authCode: ''
 });
 
+// 验证规则
 const accountRules: FormRules = {
 	phone: [
 		{ required: true, message: '请输入手机号', trigger: 'blur' },
@@ -17,11 +19,35 @@ const accountRules: FormRules = {
 		{ len: 6, message: '验证码长度为6位', trigger: 'blur' }
 	]
 };
+
+// 登录逻辑
+const formRef = ref<InstanceType<typeof ElForm>>();
+
+const loginAction = async () => {
+	try {
+		const valid = await formRef.value?.validate();
+		if (valid) {
+			// 返回验证成功和表单数据
+			return {
+				valid: true,
+				data: { ...accountForm }
+			};
+		} else {
+			return { valid: false, data: null };
+		}
+	} catch (error) {
+		return { valid: false, data: null };
+	}
+};
+
+defineExpose({
+	loginAction
+});
 </script>
 
 <template>
 	<div class="phone-in">
-		<el-form :model="accountForm" :rules="accountRules">
+		<el-form :model="accountForm" :rules="accountRules" ref="formRef">
 			<el-form-item label="手机号" required prop="phone">
 				<el-input v-model="accountForm.phone" placeholder="请输入手机号" />
 			</el-form-item>

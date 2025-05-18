@@ -1,12 +1,14 @@
 <script lang="ts" setup>
-import { reactive } from 'vue';
-import type { FormRules } from 'element-plus';
+import { onMounted, reactive, ref, useTemplateRef } from 'vue';
+import type { ElForm, FormRules } from 'element-plus';
 
+// 登录数据
 const accountForm = reactive({
 	account: '',
 	password: ''
 });
 
+// 验证规则
 const accountRules: FormRules = {
 	account: [
 		{ required: true, message: '请输入账号', trigger: 'blur' },
@@ -17,25 +19,48 @@ const accountRules: FormRules = {
 		{ min: 6, max: 20, message: '密码长度在 6 到 20 个字符之间', trigger: 'blur' }
 	]
 };
+
+// 登录逻辑
+const formRef = ref<InstanceType<typeof ElForm>>();
+// const formRef = useTemplateRef<InstanceType<typeof ElForm>>('formRef');
+
+const loginAction = async () => {
+	try {
+		const valid = await formRef.value?.validate();
+		if (valid) {
+			// 返回验证成功和表单数据
+			return {
+				valid: true,
+				data: { ...accountForm }
+			};
+		} else {
+			return { valid: false, data: null };
+		}
+	} catch (error) {
+		return { valid: false, data: null };
+	}
+};
+
+defineExpose({
+	loginAction
+});
 </script>
 
 <template>
 	<div class="account-in">
-		<div class="phone-in">
-			<el-form :model="accountForm" :rules="accountRules" status-icon>
-				<el-form-item label="账号" required prop="account">
-					<el-input v-model="accountForm.account" placeholder="请输入账号" />
-				</el-form-item>
-				<el-form-item label="密码" required prop="password">
-					<el-input
-						v-model="accountForm.password"
-						show-password
-						placeholder="请输入密码"
-						type="password"
-					/>
-				</el-form-item>
-			</el-form>
-		</div>
+		<el-form :model="accountForm" :rules="accountRules" status-icon ref="formRef">
+			<el-form-item label="账号" required prop="account">
+				<el-input v-model="accountForm.account" placeholder="请输入账号" />
+			</el-form-item>
+			<el-form-item label="密码" required prop="password">
+				<el-input
+					v-model="accountForm.password"
+					show-password
+					placeholder="请输入密码"
+					type="password"
+				/>
+			</el-form-item>
+		</el-form>
 	</div>
 </template>
 

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
+import { ElMessage } from 'element-plus';
 
 import AccountIn from './AccountIn.vue';
 import PhoneIn from './PhoneIn.vue';
@@ -7,21 +8,60 @@ import PhoneIn from './PhoneIn.vue';
 // 切换登录方式
 const activeName = ref('account');
 
+// 登录状态
+const loading = ref(false);
+
+// 获取登录组件信息实现登录验证
+const formRef = ref<InstanceType<typeof AccountIn> | InstanceType<typeof PhoneIn>>();
+
 // 记住密码
 const isRemPsd = ref(false);
 
+// 验证错误警告
+const errWorning = () => {
+	ElMessage.error('请输入正确的账号或密码!');
+};
+
 // 登录
-const handleLogin = () => {
-	if (activeName.value === 'account') {
-		// 账号登录
-		// console.log('账号登录');
-		// console.log(isRemPsd.value);
-		// 获取账号和密码
-	} else {
-		// 手机登录
-		// console.log(isRemPsd.value);
-		// console.log('手机登录');
-		// 获取手机号和验证码
+const handleLogin = async () => {
+	loading.value = true;
+	try {
+		const result = await formRef.value?.loginAction();
+		if (result?.valid) {
+			// 根据当前登录方式处理
+			if (activeName.value === 'account') {
+				console.log('账号登录:', result.data);
+				// 调用账号登录API
+				// const res = await userApi.login({...result.data});
+			} else {
+				console.log('手机登录:', result.data);
+				// 调用手机登录API
+				// const res = await userApi.phoneLogin({ ...result.data });
+			}
+
+			// 记住密码逻辑
+			if (isRemPsd.value) {
+				localStorage.setItem(
+					'rememberLogin',
+					JSON.stringify({
+						type: activeName.value,
+						data: result.data
+					})
+				);
+			}
+
+			// 登录成功后跳转
+			// router.push('/dashboard');
+		} else {
+			console.log('错误信息');
+			errWorning();
+			// console.log('错了');
+		}
+	} catch (err) {
+		// console.error(err);
+		// 显示登录错误信息
+	} finally {
+		loading.value = false;
 	}
 };
 
@@ -70,7 +110,11 @@ watch(activeName, (newValue, oldValue) => {
 					:name="transitionDirection === 'next' ? 'slide-next' : 'slide-prev'"
 					mode="out-in"
 				>
-					<component :is="activeName === 'account' ? AccountIn : PhoneIn" :key="activeName" />
+					<component
+						:is="activeName === 'account' ? AccountIn : PhoneIn"
+						:key="activeName"
+						ref="formRef"
+					/>
 				</Transition>
 			</div>
 		</div>

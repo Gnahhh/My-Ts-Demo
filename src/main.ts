@@ -1,10 +1,12 @@
-import 'normalize.css';
-import '@/assets/css/reset.less';
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
 import pinia from './store';
 import * as ElementPlusIconsVue from '@element-plus/icons-vue';
+
+import 'normalize.css';
+import '@/assets/css/reset.less';
+import 'element-plus/theme-chalk/el-message.css';
 
 const app = createApp(App);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
