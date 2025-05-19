@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { onMounted, reactive, ref, useTemplateRef } from 'vue';
+import { reactive, ref } from 'vue';
 import type { ElForm, FormRules } from 'element-plus';
+import type { AccountLoginResult } from '@/types/login';
 
 // 登录数据
 const accountForm = reactive({
@@ -24,20 +25,21 @@ const accountRules: FormRules = {
 const formRef = ref<InstanceType<typeof ElForm>>();
 // const formRef = useTemplateRef<InstanceType<typeof ElForm>>('formRef');
 
-const loginAction = async () => {
+const loginAction = async (): Promise<AccountLoginResult> => {
 	try {
 		const valid = await formRef.value?.validate();
 		if (valid) {
 			// 返回验证成功和表单数据
 			return {
 				valid: true,
-				data: { ...accountForm }
+				type: 'account',
+				data: accountForm
 			};
 		} else {
-			return { valid: false, data: null };
+			return { valid: false, type: 'account', data: null };
 		}
 	} catch (error) {
-		return { valid: false, data: null };
+		return { valid: false, type: 'account', data: null };
 	}
 };
 

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
 import type { FormRules, ElForm } from 'element-plus';
+import type { PhoneLoginResult } from '@/types/login';
 
 // 登录数据
 const accountForm = reactive({
@@ -23,20 +24,21 @@ const accountRules: FormRules = {
 // 登录逻辑
 const formRef = ref<InstanceType<typeof ElForm>>();
 
-const loginAction = async () => {
+const loginAction = async (): Promise<PhoneLoginResult> => {
 	try {
 		const valid = await formRef.value?.validate();
 		if (valid) {
 			// 返回验证成功和表单数据
 			return {
 				valid: true,
+				type: 'phone', // 添加类型标记
 				data: { ...accountForm }
 			};
 		} else {
-			return { valid: false, data: null };
+			return { valid: false, type: 'phone', data: null };
 		}
 	} catch (error) {
-		return { valid: false, data: null };
+		return { valid: false, type: 'phone', data: null };
 	}
 };
 

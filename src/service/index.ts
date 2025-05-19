@@ -1,43 +1,22 @@
-import HYRequest from './request';
+import HRequest from './request';
 
-import { BASE_URL, TIME_OUT } from './config/index';
+import { BASE_URL, TIME_OUT } from './config';
+// import { TOKEN } from '@/global/constance';
+// import { localCache } from '@/utils/cache';
 
-const hyRequest = new HYRequest({
+const hRequest = new HRequest({
 	baseURL: BASE_URL,
-
-	timeout: TIME_OUT,
-
-	interceptors: {
-		requestInterceptor: config => {
-			const token = '';
-
-			if (token) {
-				config.headers!.Authorization = token;
-			}
-
-			console.log('请求成功拦截');
-
-			return config;
-		},
-
-		requestInterceptorCatch: err => {
-			console.log('请求失败拦截');
-
-			return err;
-		},
-
-		responseInterceptor: config => {
-			console.log('响应成功拦截');
-
-			return config;
-		},
-
-		responseInterceptorCatch: err => {
-			console.log('响应失败拦截');
-
-			return err;
-		}
-	}
+	timeout: TIME_OUT
+	// interceptors: {
+	// 	requestSuccessFn: config => {
+	// 		// 请求拦截加 token 每个请求都携带token
+	// 		const token = localCache.getCache(TOKEN);
+	// 		if (config.headers && token) {
+	// 			//类型缩小
+	// 			config.headers.Authorization = 'Bearer ' + token;
+	// 		}
+	// 		return config;
+	// 	}
+	// }
 });
-
-export default hyRequest;
+export default hRequest;

@@ -1,111 +1,86 @@
-import type { AxiosInstance } from 'axios';
 import axios from 'axios';
-import type { HYRequestConfig, HYRequestInterceptors } from './type';
+import type { AxiosInstance } from 'axios';
+// 拦截器：loading、token、修改配置
+// AxiosRequestConfig类型中没有 interceptors 需要扩展类型
+import HRequestConfig from './type';
 
-class HYRequest {
+class HRequest {
 	instance: AxiosInstance;
+	constructor(config: HRequestConfig) {
+		// 每个实例都会 创建axios
+		this.instance = axios.create(config);
 
-	interceptors?: HYRequestInterceptors;
-
-	constructor(config: HYRequestConfig) {
-		//创建axios实例
-
-		this.instance = axios.create(config); //保存基本信息
-
-		this.interceptors = config.interceptors; //使用拦截器
-		//从config钟取出的拦截器是对应的实例的拦截器
-
-		this.instance.interceptors.request.use(
-			// this.interceptors?.requestInterceptor,
-
-			this.interceptors?.requestInterceptorCatch
-		);
-
-		this.instance.interceptors.response.use(
-			this.interceptors?.responseInterceptor,
-
-			this.interceptors?.requestInterceptorCatch
-		); //所有的实例都有的拦截器
-
+		//   实例 全局的拦截器
 		this.instance.interceptors.request.use(
 			config => {
-				console.log('所有的实例都有的拦截器: 请求拦截成功');
+				console.log('实例-> 全局的请求成功的拦截：');
 				return config;
 			},
-
 			err => {
-				console.log('所有的实例都有的拦截器: 请求拦截失败');
-
+				console.log('实例-> 全局的请求失败的拦截：');
 				return err;
 			}
 		);
-
 		this.instance.interceptors.response.use(
 			res => {
-				console.log('所有的实例都有的拦截器: 响应拦截成功');
-
+				console.log('实例-> 全局的响应成功的拦截：');
+				//  res.data => promise的res类型有问题 ： 通过泛型解决
 				return res.data;
 			},
-
 			err => {
-				console.log('所有的实例都有的拦截器: 响应拦截失败'); //例子:判断不同httpErrorCode显示不同错误信息
-
-				if (err.response.status === 404) {
-					console.log('404错误~');
-				}
-
+				console.log('实例-> 全局的响应失败的拦截：');
 				return err;
 			}
 		);
+		//   针对特定的HRequest实例添加拦截
+		this.instance.interceptors.request.use(
+			config.interceptors?.requestSuccessFn,
+			config.interceptors?.requestFailedFn
+		);
+		this.instance.interceptors.response.use(
+			config.interceptors?.responseSuccessFn,
+			config.interceptors?.responseFailedFn
+		);
 	}
-
-	request<T>(config: HYRequestConfig<T>): Promise<T> {
-		return new Promise((resolve, reject) => {
-			//单个请求对请求config的处理
-
-			if (config.interceptors?.requestInterceptor) {
-				config = config.interceptors.requestInterceptor(config);
-			}
-
+	// 网络请求泛型； 因为promise的成功的回调 返回的类型 是创建实例时确定的
+	// HRequestConfig<T> ： HRequestConfig中的拦截器 响应成功的返回数据类型需要和 promise一致
+	request<T = any>(config: HRequestConfig<T>) {
+		// 针对网络请求 中，有 拦截器
+		if (config.interceptors?.requestSuccessFn) {
+			// 单次请求的成功拦截
+			config.interceptors.requestSuccessFn(config as any);
+		}
+		// 返回的promise
+		return new Promise<T>((resolve, reject) => {
 			this.instance
-
 				.request<any, T>(config)
-
 				.then(res => {
-					//单个请求对数据的处理
-
-					if (config.interceptors?.responseInterceptor) {
-						res = config.interceptors.responseInterceptor(res);
+					if (config.interceptors?.responseSuccessFn) {
+						res = config.interceptors.responseSuccessFn(res);
 					}
-
-					console.log(res); //将结果返回出去
-
 					resolve(res);
 				})
-
 				.catch(err => {
 					reject(err);
-
-					return err;
 				});
 		});
 	}
 
-	get<T>(config: HYRequestConfig<T>): Promise<T> {
-		return this.request<T>({ ...config, method: 'GET' });
+	get<T = any>(config: HRequestConfig<T>) {
+		return this.request({ ...config, method: 'GET' });
 	}
-
-	post<T>(config: HYRequestConfig<T>): Promise<T> {
-		return this.request<T>({ ...config, method: 'POST' });
+	post<T = any>(config: HRequestConfig<T>) {
+		return this.request({ ...config, method: 'POST' });
 	}
-
-	delete<T>(config: HYRequestConfig<T>): Promise<T> {
-		return this.request<T>({ ...config, method: 'DELETE' });
+	delete<T = any>(config: HRequestConfig<T>) {
+		return this.request({ ...config, method: 'DELETE' });
 	}
-
-	patch<T>(config: HYRequestConfig<T>): Promise<T> {
-		return this.request<T>({ ...config, method: 'PATCH' });
+	put<T = any>(config: HRequestConfig<T>) {
+		return this.request({ ...config, method: 'PUT' });
+	}
+	patch<T = any>(config: HRequestConfig<T>) {
+		return this.request({ ...config, method: 'PATCH' });
 	}
 }
 
-export default HYRequest;
+export default HRequest;

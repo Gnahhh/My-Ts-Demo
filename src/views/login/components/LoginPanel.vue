@@ -4,6 +4,10 @@ import { ElMessage } from 'element-plus';
 
 import AccountIn from './AccountIn.vue';
 import PhoneIn from './PhoneIn.vue';
+import { useLoginStore } from '@/store/modules/login/login';
+
+// 获取store
+const loginStore = useLoginStore();
 
 // 切换登录方式
 const activeName = ref('account');
@@ -29,10 +33,13 @@ const handleLogin = async () => {
 		const result = await formRef.value?.loginAction();
 		if (result?.valid) {
 			// 根据当前登录方式处理
-			if (activeName.value === 'account') {
-				console.log('账号登录:', result.data);
-				// 调用账号登录API
-				// const res = await userApi.login({...result.data});
+			if (result?.valid && result.type === 'account' && result.data) {
+				let { account, password } = result.data;
+				const res = await loginStore.loginAccountAction({ name: account, password });
+				console.log(loginStore.token);
+				// console.log(loginStore.token);
+				// const res = await accountLogin({ name: account, password });
+				// console.log(res);
 			} else {
 				console.log('手机登录:', result.data);
 				// 调用手机登录API
