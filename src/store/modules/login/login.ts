@@ -1,27 +1,37 @@
 import { defineStore } from 'pinia';
 import { useLocalStorage } from '@/utils/handleStorage';
-import { accountLogin, getUserInfoById } from '@/service/modules/login/login';
+import { accountLogin, getUserInfoById, getUserMenusByRoleId } from '@/service/modules/login/login';
 import router from '@/router';
+import type { UserInfo, LoginState, MenuTree } from '@/types/login';
 
 const localStorage = useLocalStorage('login');
 
 const useLoginStore = defineStore('login', {
-	state: () => ({
+	state: (): LoginState => ({
 		id: 0,
 		token: localStorage.getItem('token') ?? '',
-		name: ''
+		name: '',
+		userInfos: {} as UserInfo,
+		userMenus: {} as MenuTree
 	}),
 	actions: {
 		async loginAccountAction(account: any) {
 			try {
+				// 1.获取登录信息
 				const res = await accountLogin(account);
 				const { id, name, token } = res.data;
 				this.id = id;
 				this.name = name;
 				this.token = token;
+				// 2.设置token
 				localStorage.setItem('token', this.token);
-				const userInfo = await getUserInfoById(id);
-				console.log(userInfo);
+				// 3.获取用户权限
+				const getedUserInfos = await getUserInfoById(id);
+				this.userInfos = getedUserInfos.data;
+				// 4.获取用户菜单
+				const getedUserMenus = await getUserMenusByRoleId(this.userInfos.id);
+				this.userMenus = getedUserMenus.data;
+
 				router.push('/home');
 				return { success: true };
 			} catch (err) {
