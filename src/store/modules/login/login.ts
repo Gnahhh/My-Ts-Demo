@@ -1,13 +1,13 @@
 import { defineStore } from 'pinia';
-import { accountLogin } from '@/service/modules/login/login';
 import { useLocalStorage } from '@/utils/handleStorage';
+import { accountLogin, getUserInfoById } from '@/service/modules/login/login';
 import router from '@/router';
 
 const localStorage = useLocalStorage('login');
 
 const useLoginStore = defineStore('login', {
 	state: () => ({
-		id: '',
+		id: 0,
 		token: localStorage.getItem('token') ?? '',
 		name: ''
 	}),
@@ -20,6 +20,8 @@ const useLoginStore = defineStore('login', {
 				this.name = name;
 				this.token = token;
 				localStorage.setItem('token', this.token);
+				const userInfo = await getUserInfoById(id);
+				console.log(userInfo);
 				router.push('/home');
 				return { success: true };
 			} catch (err) {

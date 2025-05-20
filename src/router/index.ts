@@ -27,15 +27,17 @@ const router = createRouter({
 });
 
 // 路由守卫
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, from) => {
 	const localStorage = useLocalStorage('login');
 	const token = localStorage.getItem('token');
-	// console.log(token);
 
-	if (to.path != '/login' && !token) {
-		next('/login');
-	} else {
-		next();
+	if (to.path !== '/login' && !token) {
+		return '/login';
+	}
+
+	if (to.path === '/login') {
+		if (token) return '/home';
+		return true;
 	}
 });
 
