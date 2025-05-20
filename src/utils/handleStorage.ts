@@ -34,7 +34,7 @@ export function useLocalStorage(prefix: string) {
 		const prefixedKey = prefix + key;
 
 		// 获取value
-		const item = localStorage.getItem(prefix);
+		const item = localStorage.getItem(prefixedKey);
 
 		// 判断value
 		if (!item) return null;

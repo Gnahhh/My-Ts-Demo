@@ -36,10 +36,6 @@ const handleLogin = async () => {
 			if (result?.valid && result.type === 'account' && result.data) {
 				let { account, password } = result.data;
 				const res = await loginStore.loginAccountAction({ name: account, password });
-				console.log(loginStore.token);
-				// console.log(loginStore.token);
-				// const res = await accountLogin({ name: account, password });
-				// console.log(res);
 			} else {
 				console.log('手机登录:', result.data);
 				// 调用手机登录API
@@ -56,11 +52,8 @@ const handleLogin = async () => {
 					})
 				);
 			}
-
-			// 登录成功后跳转
-			// router.push('/dashboard');
 		} else {
-			console.log('错误信息');
+			// console.log('错误信息');/
 			errWorning();
 			// console.log('错了');
 		}

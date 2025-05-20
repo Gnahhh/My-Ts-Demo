@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { accountLogin } from '@/service/modules/login/login';
 import { useLocalStorage } from '@/utils/handleStorage';
+import router from '@/router';
 
 const localStorage = useLocalStorage('login');
 
@@ -19,6 +20,7 @@ const useLoginStore = defineStore('login', {
 				this.name = name;
 				this.token = token;
 				localStorage.setItem('token', this.token);
+				router.push('/home');
 				return { success: true };
 			} catch (err) {
 				console.error('登陆失败', err);

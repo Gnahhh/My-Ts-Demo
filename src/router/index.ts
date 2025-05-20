@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
+import { useLocalStorage } from '@/utils/handleStorage';
 
 const router = createRouter({
 	history: createWebHashHistory(),
@@ -23,6 +24,19 @@ const router = createRouter({
 			component: () => import('../views/login/Login.vue')
 		}
 	]
+});
+
+// 路由守卫
+router.beforeEach((to, from, next) => {
+	const localStorage = useLocalStorage('login');
+	const token = localStorage.getItem('token');
+	// console.log(token);
+
+	if (to.path != '/login' && !token) {
+		next('/login');
+	} else {
+		next();
+	}
 });
 
 export default router;
