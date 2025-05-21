@@ -13,22 +13,22 @@ class HRequest {
 		//   实例 全局的拦截器
 		this.instance.interceptors.request.use(
 			config => {
-				console.log('实例-> 全局的请求成功的拦截：');
+				// console.log('实例-> 全局的请求成功的拦截：');
 				return config;
 			},
 			err => {
-				console.log('实例-> 全局的请求失败的拦截：');
+				// console.log('实例-> 全局的请求失败的拦截：');
 				return err;
 			}
 		);
 		this.instance.interceptors.response.use(
 			res => {
-				console.log('实例-> 全局的响应成功的拦截：');
+				// console.log('实例-> 全局的响应成功的拦截：');
 				//  res.data => promise的res类型有问题 ： 通过泛型解决
 				return res.data;
 			},
 			err => {
-				console.log('实例-> 全局的响应失败的拦截：');
+				// console.log('实例-> 全局的响应失败的拦截：');
 				return err;
 			}
 		);

@@ -1,6 +1,4 @@
-import { MenuTree } from './menu';
-
-interface AccountLoginResult {
+export interface AccountLoginResult {
 	valid: boolean;
 	type: 'account';
 	data: {
@@ -9,7 +7,7 @@ interface AccountLoginResult {
 	} | null;
 }
 
-interface PhoneLoginResult {
+export interface PhoneLoginResult {
 	valid: boolean;
 	type: 'phone'; // 添加类型标记，与account区分
 	data: {
@@ -18,23 +16,44 @@ interface PhoneLoginResult {
 	} | null;
 }
 
-// 用户信息接口
-interface UserInfo {
-	id: number;
-	name: string; // 用户名称/角色名称
-	intro: string; // 角色介绍/描述
-	createAt: string; // 创建时间 (注意不是createdAt)
-	updateAt: string; // 更新时间 (注意不是updatedAt)
-	[key: string]: any; // 允许其他可能的属性
+/// 定义接口类型
+// 通用API响应接口
+interface ApiResponse<T> {
+	code: number;
+	data: T;
 }
 
-// 登录store的state类型
-interface LoginState {
+// 登录结果数据接口
+export interface LoginResult {
 	id: number;
-	token: string;
 	name: string;
-	userInfos: UserInfo;
-	userMenus: MenuTree;
+	token: string;
 }
 
-export { AccountLoginResult, PhoneLoginResult, UserInfo, LoginState, MenuTree };
+// 用户信息
+export interface userResult {
+	id: number;
+	intro: string;
+	name: string;
+	createAt: string;
+	updateAt: string;
+}
+
+// 菜单信息
+// 菜单项接口
+export interface MenuResult {
+	id: number;
+	name: string;
+	type: number;
+	url: string | null;
+	sort: number | null;
+	children?: MenuResult[] | null;
+	parentId?: number;
+	permission?: string;
+	icon?: string;
+}
+
+export type LoginResponse = ApiResponse<LoginResult>;
+export type UserResopnse = ApiResponse<userResult>;
+// 菜单项联合类型 - 任何类型的菜单项
+export type MenuResponse = ApiResponse<MenuResult[]>;
