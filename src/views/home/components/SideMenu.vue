@@ -8,7 +8,6 @@ const { userMenus } = storeToRefs(loginStore);
 
 <template>
 	<div class="side-menu">
-		<!-- <h1>side-menu</h1> -->
 		<div class="header">
 			<img src="@/assets/img/管理.svg" alt="" />
 			<h1 class="title">管理系统</h1>
@@ -33,11 +32,9 @@ const { userMenus } = storeToRefs(loginStore);
 		padding: 1.5rem 1.25rem;
 		display: flex;
 		align-items: center;
-		background-color: @color-primary;
 		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 		position: relative;
-		// z-index: 2;
 
 		&::after {
 			content: '';
@@ -100,7 +97,6 @@ const { userMenus } = storeToRefs(loginStore);
 				border-left: 4px solid transparent;
 				transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 				position: relative;
-				margin-bottom: 2px;
 
 				&::after {
 					content: '';

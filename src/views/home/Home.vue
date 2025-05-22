@@ -16,7 +16,7 @@ const toggleSiderbar = () => {
 	<div class="home">
 		<SideMenu class="sider" :class="{ 'sider-collapsed': isCollapsed }" :collapsed="isCollapsed" />
 		<div class="right-content">
-			<HeaderBar class="header" @toggle="toggleSiderbar" />
+			<HeaderBar class="header" />
 			<ContentArea class="content" />
 		</div>
 	</div>
@@ -54,12 +54,7 @@ const toggleSiderbar = () => {
 		display: flex;
 		flex-direction: column;
 		flex: 1;
-		background-color: skyblue;
-
-		.header {
-			padding: 20px;
-			background-color: orange;
-		}
+		// background-color: skyblue;
 
 		.content {
 			flex: 1;

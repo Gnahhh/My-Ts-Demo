@@ -71,7 +71,7 @@ defineExpose({
 			transition: all 0.2s ease;
 
 			&:hover {
-				box-shadow: 0 0 0 1px @color-primary inset !important;
+				box-shadow: 0 0 0 1px #409eff inset !important;
 			}
 		}
 
