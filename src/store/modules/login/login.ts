@@ -8,7 +8,7 @@ const localStorage = useLocalStorage('login');
 const useLoginStore = defineStore('login', {
 	state: () => ({
 		id: 0,
-		token: localStorage.getItem('token') ?? '',
+		token: localStorage.getItem('token') || ' ',
 		name: '',
 		userInfos: {} as userResult,
 		userMenus: [] as MenuResult[]
@@ -18,7 +18,6 @@ const useLoginStore = defineStore('login', {
 			try {
 				// 1.获取登录信息
 				const res = await accountLogin(account);
-				// console.log(res);
 				const { id, name, token } = res.data;
 				this.id = id;
 				this.name = name;
@@ -30,7 +29,6 @@ const useLoginStore = defineStore('login', {
 				this.userInfos = getedUserInfos.data;
 				// // 4.获取用户菜单
 				const getedUserMenus = await getUserMenusByRoleId(this.userInfos.id);
-				// console.log(getedUserMenus);
 				this.userMenus = getedUserMenus.data;
 
 				return { success: true };
@@ -39,7 +37,12 @@ const useLoginStore = defineStore('login', {
 				return { success: false, err };
 			}
 		}
-	}
+	},
+	persist: {
+		key: 'store',
+		storage: localStorage,
+		paths: ['id', 'name', 'userInfos', 'userMenus']
+	} as any
 });
 
 export { useLoginStore };

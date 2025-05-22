@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
 import { ElMessage } from 'element-plus';
-
 import AccountIn from './AccountIn.vue';
 import PhoneIn from './PhoneIn.vue';
 import { useLoginStore } from '@/store/modules/login/login';
+import router from '@/router';
 
 // 获取store
 const loginStore = useLoginStore();
@@ -36,6 +36,10 @@ const handleLogin = async () => {
 			if (result?.valid && result.type === 'account' && result.data) {
 				let { account, password } = result.data;
 				const res = await loginStore.loginAccountAction({ name: account, password });
+				// console.log(res);
+				if (res.success) {
+					router.push('/home');
+				}
 			} else {
 				console.log('手机登录:', result.data);
 				// 调用手机登录API

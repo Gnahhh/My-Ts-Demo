@@ -28,27 +28,27 @@ const toggleSiderbar = () => {
 	height: 100%;
 
 	.sider {
-		width: 200px;
+		width: 12.5rem;
 		height: 100%;
-		background-color: red;
+		// background-color: red;
 		transition: all 0.3s;
 
 		&.sider-collapsed {
-			width: 64px;
+			width: 4rem;
 		}
 	}
 
 	// 平板设备断点
-	@media (max-width: 992px) {
-		.sider {
-			width: 80px;
+	// @media (max-width: 992px) {
+	// 	.sider {
+	// 		width: 80px;
 
-			&.sider-collapsed {
-				width: 0;
-				overflow: hidden;
-			}
-		}
-	}
+	// 		&.sider-collapsed {
+	// 			width: 0;
+	// 			overflow: hidden;
+	// 		}
+	// 	}
+	// }
 
 	.right-content {
 		display: flex;
