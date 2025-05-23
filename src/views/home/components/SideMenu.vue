@@ -105,122 +105,122 @@ const props = defineProps({
 			height: 0;
 		}
 
-		// 修改PullDownList的样式
-		:deep(.pull-down-menu) {
-			.menu-parent-item {
-				padding: 0.85rem 1.25rem;
-				background-color: @color-primary-dark;
-				color: rgb(255, 255, 255);
-				border-left: 4px solid transparent;
-				transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-				position: relative;
+		// // 修改PullDownList的样式
+		// :deep(.pull-down-menu) {
+		// 	.menu-parent-item {
+		// 		padding: 0.85rem 1.25rem;
+		// 		background-color: @color-primary-dark;
+		// 		color: rgb(255, 255, 255);
+		// 		border-left: 4px solid transparent;
+		// 		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		// 		position: relative;
 
-				&::after {
-					content: '';
-					position: absolute;
-					bottom: 0;
-					left: 5%;
-					right: 5%;
-					height: 1px;
-					background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
-					opacity: 0;
-					transition: opacity 0.3s ease;
-				}
+		// 		&::after {
+		// 			content: '';
+		// 			position: absolute;
+		// 			bottom: 0;
+		// 			left: 5%;
+		// 			right: 5%;
+		// 			height: 1px;
+		// 			background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+		// 			opacity: 0;
+		// 			transition: opacity 0.3s ease;
+		// 		}
 
-				&:hover {
-					background-color: @color-primary;
-					// transform: translateX(2px);
-					margin-left: 0.125rem;
+		// 		&:hover {
+		// 			background-color: @color-primary;
+		// 			// transform: translateX(2px);
+		// 			margin-left: 0.125rem;
 
-					&::after {
-						opacity: 1;
-					}
+		// 			&::after {
+		// 				opacity: 1;
+		// 			}
 
-					.menu-icon {
-						transform: scale(1.15);
-						color: @color-primary-lighter;
-					}
-				}
+		// 			.menu-icon {
+		// 				transform: scale(1.15);
+		// 				color: @color-primary-lighter;
+		// 			}
+		// 		}
 
-				&.menu-expanded {
-					background-color: @color-primary;
-					border-left-color: @color-primary-lighter;
-					box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+		// 		&.menu-expanded {
+		// 			background-color: @color-primary;
+		// 			border-left-color: @color-primary-lighter;
+		// 			box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
 
-					&::after {
-						opacity: 1;
-						background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
-					}
-				}
-				.menu-icon {
-					color: @color-info;
-					font-size: 1.2rem;
-					transition: all 0.3s ease;
-				}
+		// 			&::after {
+		// 				opacity: 1;
+		// 				background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+		// 			}
+		// 		}
+		// 		.menu-icon {
+		// 			color: @color-info;
+		// 			font-size: 1.2rem;
+		// 			transition: all 0.3s ease;
+		// 		}
 
-				.menu-label {
-					margin-left: 0.85rem;
-					font-weight: 500;
-					transition: color 0.2s ease;
-				}
+		// 		.menu-label {
+		// 			margin-left: 0.85rem;
+		// 			font-weight: 500;
+		// 			transition: color 0.2s ease;
+		// 		}
 
-				.menu-arrow {
-					transition: transform 0.3s ease;
-				}
+		// 		.menu-arrow {
+		// 			transition: transform 0.3s ease;
+		// 		}
 
-				&:hover .menu-arrow {
-					// transform: translateX(-3px);
-					margin-left: -0.1875rem;
-				}
+		// 		&:hover .menu-arrow {
+		// 			// transform: translateX(-3px);
+		// 			margin-left: -0.1875rem;
+		// 		}
 
-				&.menu-expanded .menu-arrow {
-					color: @color-primary-lighter;
-				}
-			}
+		// 		&.menu-expanded .menu-arrow {
+		// 			color: @color-primary-lighter;
+		// 		}
+		// 	}
 
-			.menu-children {
-				background-color: rgb(8, 20, 46);
-				box-shadow:
-					inset 0 5px 5px -5px rgba(0, 0, 0, 0.2),
-					inset 0 -5px 5px -5px rgba(0, 0, 0, 0.2);
+		// 	.menu-children {
+		// 		background-color: rgb(8, 20, 46);
+		// 		box-shadow:
+		// 			inset 0 5px 5px -5px rgba(0, 0, 0, 0.2),
+		// 			inset 0 -5px 5px -5px rgba(0, 0, 0, 0.2);
 
-				.menu-child-item {
-					padding: 0.7rem 1rem 0.7rem 3.2rem;
-					color: rgba(255, 255, 255, 0.75);
-					transition: all 0.25s ease;
-					position: relative;
-					text-align: left;
+		// 		.menu-child-item {
+		// 			padding: 0.7rem 1rem 0.7rem 3.2rem;
+		// 			color: rgba(255, 255, 255, 0.75);
+		// 			transition: all 0.25s ease;
+		// 			position: relative;
+		// 			text-align: left;
 
-					&::before {
-						content: '';
-						position: absolute;
-						left: 1.8rem;
-						top: 50%;
-						width: 5px;
-						height: 5px;
-						border-radius: 50%;
-						background-color: rgba(255, 255, 255, 0.3);
-						transform: translateY(-50%);
-						transition: all 0.25s ease;
-					}
+		// 			&::before {
+		// 				content: '';
+		// 				position: absolute;
+		// 				left: 1.8rem;
+		// 				top: 50%;
+		// 				width: 5px;
+		// 				height: 5px;
+		// 				border-radius: 50%;
+		// 				background-color: rgba(255, 255, 255, 0.3);
+		// 				transform: translateY(-50%);
+		// 				transition: all 0.25s ease;
+		// 			}
 
-					&:hover {
-						background-color: rgba(255, 255, 255, 0.08);
-						color: rgb(255, 255, 255);
-						padding-left: 3.5rem;
+		// 			&:hover {
+		// 				background-color: rgba(255, 255, 255, 0.08);
+		// 				color: rgb(255, 255, 255);
+		// 				padding-left: 3.5rem;
 
-						&::before {
-							background-color: @color-primary-lighter;
-							box-shadow: 0 0 5px @color-primary-lighter;
-						}
-					}
+		// 				&::before {
+		// 					background-color: @color-primary-lighter;
+		// 					box-shadow: 0 0 5px @color-primary-lighter;
+		// 				}
+		// 			}
 
-					&:active {
-						background-color: rgba(0, 0, 0, 0.2);
-					}
-				}
-			}
-		}
+		// 			&:active {
+		// 				background-color: rgba(0, 0, 0, 0.2);
+		// 			}
+		// 		}
+		// 	}
+		// }
 	}
 }
 </style>
