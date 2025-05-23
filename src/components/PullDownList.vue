@@ -7,6 +7,10 @@ const props = defineProps({
 	options: {
 		type: Array as PropType<MenuResult[]>,
 		required: true
+	},
+	isCollapsed: {
+		type: Boolean,
+		default: false
 	}
 });
 

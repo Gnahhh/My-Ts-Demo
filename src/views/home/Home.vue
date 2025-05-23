@@ -7,16 +7,13 @@ import { ref } from 'vue';
 
 // 控制侧边栏折叠祖杭太
 const isCollapsed = ref(false);
-const toggleSiderbar = () => {
-	isCollapsed.value = !isCollapsed.value;
-};
 </script>
 
 <template>
 	<div class="home">
 		<SideMenu class="sider" :class="{ 'sider-collapsed': isCollapsed }" :collapsed="isCollapsed" />
 		<div class="right-content">
-			<HeaderBar class="header" />
+			<HeaderBar class="header" v-model:collapsed="isCollapsed" />
 			<ContentArea class="content" />
 		</div>
 	</div>

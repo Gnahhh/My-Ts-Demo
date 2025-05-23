@@ -1,19 +1,36 @@
 <script lang="ts" setup>
-import PullDownList from '@/components/PullDownList.vue';
+import MenuItem from '@/components/MenuItem.vue';
+
 import { useLoginStore } from '@/store/modules/login/login';
 import { storeToRefs } from 'pinia';
+
 const loginStore = useLoginStore();
 const { userMenus } = storeToRefs(loginStore);
+
+const props = defineProps({
+	collapsed: {
+		type: Boolean,
+		defult: false
+	}
+});
 </script>
 
 <template>
 	<div class="side-menu">
 		<div class="header">
 			<img src="@/assets/img/管理.svg" alt="" />
-			<h1 class="title">管理系统</h1>
+			<h1 class="title" v-show="!collapsed">管理系统</h1>
 		</div>
 		<div class="menu">
-			<PullDownList :options="userMenus" />
+			<!-- 使用循环MenuItem组件替代PullDownList -->
+			<div class="pull-down-menu">
+				<MenuItem
+					v-for="(item, index) in userMenus"
+					:key="index"
+					:item="item"
+					:collapsed="collapsed"
+				/>
+			</div>
 		</div>
 	</div>
 </template>

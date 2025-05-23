@@ -1,10 +1,18 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
 
+const props = defineProps({
+	collapsed: {
+		type: Boolean,
+		default: false
+	}
+});
+
+const emit = defineEmits(['update:collapsed']);
+
 // 折叠
-const isFold = ref(false);
-const changeFold = () => {
-	isFold.value = !isFold.value;
+const toggleSidebar = () => {
+	emit('update:collapsed', !props.collapsed);
 };
 
 // 导航信息
@@ -19,6 +27,7 @@ const messageClick = () => {
 const infoClick = () => {
 	console.log('用户点击');
 };
+
 const userInfos = reactive({
 	id: 1,
 	name: 'hang',
@@ -32,8 +41,8 @@ const showUserMenu = ref(false);
 <template>
 	<div class="header-bar">
 		<div class="nav-bar">
-			<div class="fold-btn" @click="changeFold">
-				<el-icon v-if="isFold"><Fold /></el-icon>
+			<div class="fold-btn" @click="toggleSidebar">
+				<el-icon v-if="!collapsed"><Fold /></el-icon>
 				<el-icon v-else><Expand /></el-icon>
 			</div>
 			<div class="crumb">
@@ -194,6 +203,11 @@ const showUserMenu = ref(false);
 					display: flex;
 					align-items: center;
 					cursor: pointer;
+
+					.el-icon {
+						margin-right: 0.0625rem;
+						transform: translateY(0.0625rem);
+					}
 
 					&:hover {
 						background-color: #f5f7fa;
