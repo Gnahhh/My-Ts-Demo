@@ -38,7 +38,7 @@ const handleLogin = async () => {
 				const res = await loginStore.loginAccountAction({ name: account, password });
 				// console.log(res);
 				if (res.success) {
-					router.push('/home');
+					router.push('/main');
 				}
 			} else {
 				console.log('手机登录:', result.data);

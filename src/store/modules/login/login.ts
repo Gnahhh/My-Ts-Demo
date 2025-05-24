@@ -1,7 +1,9 @@
 import { defineStore } from 'pinia';
 import { useLocalStorage } from '@/utils/handleStorage';
 import { accountLogin, getUserInfoById, getUserMenusByRoleId } from '@/service/modules/login/login';
+import { routeMapper } from '@/utils/routeMapper';
 import type { userResult, MenuResult } from '@/types/login';
+import router from '@/router';
 
 const localStorage = useLocalStorage('login');
 
@@ -24,12 +26,15 @@ const useLoginStore = defineStore('login', {
 				this.token = token;
 				// 2.设置token
 				localStorage.setItem('token', this.token);
-				// // 3.获取用户权限
+				// 3.获取用户权限
 				const getedUserInfos = await getUserInfoById(id);
 				this.userInfos = getedUserInfos.data;
-				// // 4.获取用户菜单
+				// 4.获取用户菜单
 				const getedUserMenus = await getUserMenusByRoleId(this.userInfos.id);
 				this.userMenus = getedUserMenus.data;
+				// 5.动态路由
+				const routeList = routeMapper(this.userMenus);
+				routeList.forEach(route => router.addRoute('Main', route));
 
 				return { success: true };
 			} catch (err) {

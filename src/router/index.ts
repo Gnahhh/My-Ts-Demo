@@ -6,7 +6,7 @@ const router = createRouter({
 	routes: [
 		{
 			path: '/',
-			redirect: '/home'
+			redirect: '/main'
 		},
 		{
 			path: '/:pathMatch(.*)*',
@@ -14,9 +14,9 @@ const router = createRouter({
 			component: () => import('../views/not-found/NotFound.vue')
 		},
 		{
-			path: '/home',
-			name: 'Home',
-			component: () => import('../views/home/Home.vue')
+			path: '/main',
+			name: 'Main',
+			component: () => import('../views/main/Main.vue')
 		},
 		{
 			path: '/login',

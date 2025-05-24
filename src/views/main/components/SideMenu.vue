@@ -49,9 +49,11 @@ const props = defineProps({
 		padding: 1.5rem 1.25rem;
 		display: flex;
 		align-items: center;
+		justify-content: center;
 		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 		position: relative;
+		width: 100%;
 
 		&::after {
 			content: '';
@@ -76,6 +78,7 @@ const props = defineProps({
 		}
 
 		.title {
+			overflow: hidden;
 			font-size: 1.35rem;
 			font-weight: 600;
 			color: rgb(255, 255, 255);

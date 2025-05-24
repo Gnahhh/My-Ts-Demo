@@ -37,7 +37,7 @@ const sliceIconName = (name: string) => {
 		<!-- 父菜单项 -->
 		<div class="menu-parent-item" :class="{ 'menu-expanded': isExpanded }" @click="toggleExpand">
 			<div class="menu-title">
-				<el-icon class="menu-icon">
+				<el-icon class="menu-icon" v-if="sliceIconName(item.icon || '')">
 					<component :is="sliceIconName(item.icon || '')" />
 				</el-icon>
 				<span class="menu-label" v-show="!collapsed">{{ item.name }}</span>

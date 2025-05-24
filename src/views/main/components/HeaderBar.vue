@@ -19,7 +19,7 @@ const toggleSidebar = () => {
 
 // 用户信息
 const informClick = () => {
-	console.log('通知点击');
+	console.log('用户点击');
 };
 const messageClick = () => {
 	console.log('消息点击');
