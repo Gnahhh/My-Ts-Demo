@@ -2,7 +2,7 @@
 
 <template>
 	<div class="content-area">
-		<h1>content-area</h1>
+		<router-view></router-view>
 	</div>
 </template>
 

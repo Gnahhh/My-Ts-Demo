@@ -3,6 +3,7 @@ import { useLocalStorage } from '@/utils/handleStorage';
 import { accountLogin, getUserInfoById, getUserMenusByRoleId } from '@/service/modules/login/login';
 import { routeMapper } from '@/utils/routeMapper';
 import type { userResult, MenuResult } from '@/types/login';
+import { ElMessage } from 'element-plus';
 import router from '@/router';
 
 const localStorage = useLocalStorage('login');
@@ -23,12 +24,13 @@ const useLoginStore = defineStore('login', {
 				const { id, name, token } = res.data;
 				this.id = id;
 				this.name = name;
+				localStorage.setItem('token', this.token);
 				this.token = token;
 				// 2.设置token
-				localStorage.setItem('token', this.token);
 				// 3.获取用户权限
 				const getedUserInfos = await getUserInfoById(id);
 				this.userInfos = getedUserInfos.data;
+				// console.log(getedUserInfos);
 				// 4.获取用户菜单
 				const getedUserMenus = await getUserMenusByRoleId(this.userInfos.id);
 				this.userMenus = getedUserMenus.data;
@@ -38,7 +40,14 @@ const useLoginStore = defineStore('login', {
 
 				return { success: true };
 			} catch (err) {
-				console.error('登陆失败', err);
+				ElMessage({
+					type: 'error',
+					message: '登录失败，请检查账号密码或网络连接',
+					duration: 3000,
+					showClose: true
+				});
+				localStorage.clearItems(true);
+				// 使用Element Plus的错误提示
 				return { success: false, err };
 			}
 		}

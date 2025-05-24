@@ -1,7 +1,14 @@
 <script lang="ts" setup>
-import { PropType, ref } from 'vue';
-import type { MenuResult } from '@/types/login';
+import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useLoginStore } from '@/store/modules/login/login';
 import { ArrowUpBold, ArrowDownBold } from '@element-plus/icons-vue';
+import type { PropType } from 'vue';
+import type { MenuResult } from '@/types/login';
+
+// 引入路由和store
+const router = useRouter();
+const loginStore = useLoginStore();
 
 const props = defineProps({
 	item: {
@@ -30,6 +37,80 @@ const toggleExpand = () => {
 const sliceIconName = (name: string) => {
 	return name.replace(/^el-icon-/, '');
 };
+
+// 过滤子菜单项 - 添加缺失的计算属性
+const filteredChildren = computed(() => {
+	return props.item.children || [];
+});
+
+// 增强版menuClick - 支持不同类型的菜单
+const menuClick = (menu: MenuResult) => {
+	if (!menu) return;
+
+	// 处理不同类型菜单项
+	switch (menu.type) {
+		case 1: // 目录类型
+			if (menu.url) {
+				router.push(menu.url);
+			}
+			break;
+
+		case 2: // 菜单类型
+			if (menu.url) {
+				router.push(menu.url);
+			}
+			break;
+
+		case 3: // 按钮权限类型
+			// 查找并导航到父菜单
+			navigateToParentMenu(menu.parentId);
+			break;
+
+		default:
+			if (menu.url) {
+				router.push(menu.url);
+			}
+	}
+};
+
+// 查找父菜单并导航
+const navigateToParentMenu = (parentId: number) => {
+	if (!parentId) return;
+
+	// 根据类型查找不同级别的父菜单
+	const findParentWithUrl = (menuId: number) => {
+		// 在全局菜单中查找
+		const searchParent = (menus: MenuResult[], id: number): MenuResult | null => {
+			for (const menu of menus) {
+				if (menu.id === id) return menu;
+				if (menu.children && menu.children.length) {
+					const found = searchParent(menu.children, id);
+					if (found) return found;
+				}
+			}
+			return null;
+		};
+
+		const parent = searchParent(loginStore.userMenus, menuId);
+
+		if (parent) {
+			// 如果父菜单有URL，直接导航
+			if (parent.url) {
+				return parent;
+			}
+			// 否则递归查找其父菜单
+			else if (parent.parentId) {
+				return findParentWithUrl(parent.parentId);
+			}
+		}
+		return null;
+	};
+
+	const parentMenu = findParentWithUrl(parentId);
+	if (parentMenu?.url) {
+		router.push(parentMenu.url);
+	}
+};
 </script>
 
 <template>
@@ -54,9 +135,10 @@ const sliceIconName = (name: string) => {
 				<!-- 如果是叶子节点 -->
 				<div
 					v-if="!item.children?.[0]?.children?.length"
-					v-for="(child, index) in item.children"
+					v-for="(child, index) in filteredChildren"
 					:key="index"
-					class="menu-child-item"
+					@click.stop="menuClick(child)"
+					:class="['menu-child-item', { 'permission-item': child.type === 3 }]"
 				>
 					{{ child.name }}
 				</div>
@@ -184,6 +266,16 @@ const sliceIconName = (name: string) => {
 			&:hover {
 				color: white;
 			}
+		}
+	}
+
+	// 权限菜单项特别样式
+	.permission-item {
+		color: #a8b1c2 !important;
+		font-style: italic;
+
+		&::before {
+			background-color: #f1c40f !important;
 		}
 	}
 

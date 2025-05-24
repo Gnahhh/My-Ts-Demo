@@ -36,7 +36,6 @@ const handleLogin = async () => {
 			if (result?.valid && result.type === 'account' && result.data) {
 				let { account, password } = result.data;
 				const res = await loginStore.loginAccountAction({ name: account, password });
-				// console.log(res);
 				if (res.success) {
 					router.push('/main');
 				}

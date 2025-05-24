@@ -36,7 +36,7 @@ router.beforeEach((to, from) => {
 	}
 
 	if (to.path === '/login') {
-		if (token) return '/home';
+		if (token) return '/main';
 		return true;
 	}
 });
