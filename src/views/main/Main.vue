@@ -3,7 +3,7 @@ import ContentArea from './components/ContentArea.vue';
 import SideMenu from './components/SideMenu.vue';
 import HeaderBar from './components/HeaderBar.vue';
 
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 // 控制侧边栏折叠祖杭太
 const isCollapsed = ref(false);

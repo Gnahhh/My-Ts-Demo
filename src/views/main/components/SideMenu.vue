@@ -1,11 +1,13 @@
 <script lang="ts" setup>
 import MenuItem from '@/components/MenuItem.vue';
+import { onMounted } from 'vue';
 
 import { useLoginStore } from '@/store/modules/login/login';
 import { storeToRefs } from 'pinia';
 
 const loginStore = useLoginStore();
 const { userMenus } = storeToRefs(loginStore);
+// const userMenus = loginStore.userMenus;
 
 const props = defineProps({
 	collapsed: {
@@ -24,12 +26,7 @@ const props = defineProps({
 		<div class="menu">
 			<!-- 使用循环MenuItem组件替代PullDownList -->
 			<div class="pull-down-menu">
-				<MenuItem
-					v-for="(item, index) in userMenus"
-					:key="index"
-					:item="item"
-					:collapsed="collapsed"
-				/>
+				<MenuItem v-for="item in userMenus" :key="item.id" :item="item" :collapsed="collapsed" />
 			</div>
 		</div>
 	</div>

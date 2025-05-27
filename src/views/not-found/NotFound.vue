@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { ref, onMounted, onBeforeMount } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted, onBeforeUnmount, onDeactivated, onUnmounted } from 'vue';
+import { useRouter, onBeforeRouteLeave } from 'vue-router';
 
 const router = useRouter();
 const countdown = ref(10);
@@ -16,6 +16,14 @@ const goBack = () => {
 	router.go(-1);
 };
 
+// 清理定时器的通用函数
+const clearCountdownTimer = () => {
+	if (timer.value) {
+		clearInterval(timer.value);
+		timer.value = null;
+	}
+};
+
 // 倒计时自动跳转
 onMounted(() => {
 	timer.value = window.setInterval(() => {
@@ -28,10 +36,23 @@ onMounted(() => {
 });
 
 // 组件销毁时清除定时器
-onBeforeMount(() => {
-	if (timer.value) {
-		clearInterval(timer.value);
-	}
+onBeforeUnmount(() => {
+	clearCountdownTimer();
+});
+
+// 保留onDeactivated用于keep-alive组件
+onDeactivated(() => {
+	clearCountdownTimer();
+});
+
+// 添加：确保组件销毁时清理
+onUnmounted(() => {
+	clearCountdownTimer();
+});
+
+// 添加：路由导航守卫，在离开路由前清理
+onBeforeRouteLeave(() => {
+	clearCountdownTimer();
 });
 </script>
 

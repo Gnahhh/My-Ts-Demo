@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useLoginStore } from '@/store/modules/login/login';
 import { ArrowUpBold, ArrowDownBold } from '@element-plus/icons-vue';
@@ -51,6 +51,7 @@ const menuClick = (menu: MenuResult) => {
 	switch (menu.type) {
 		case 1: // 目录类型
 			if (menu.url) {
+				console.log(1);
 				router.push(menu.url);
 			}
 			break;
@@ -63,7 +64,7 @@ const menuClick = (menu: MenuResult) => {
 
 		case 3: // 按钮权限类型
 			// 查找并导航到父菜单
-			navigateToParentMenu(menu.parentId);
+			if (menu.parentId) navigateToParentMenu(menu.parentId);
 			break;
 
 		default:
@@ -75,8 +76,6 @@ const menuClick = (menu: MenuResult) => {
 
 // 查找父菜单并导航
 const navigateToParentMenu = (parentId: number) => {
-	if (!parentId) return;
-
 	// 根据类型查找不同级别的父菜单
 	const findParentWithUrl = (menuId: number) => {
 		// 在全局菜单中查找
@@ -136,7 +135,7 @@ const navigateToParentMenu = (parentId: number) => {
 				<div
 					v-if="!item.children?.[0]?.children?.length"
 					v-for="(child, index) in filteredChildren"
-					:key="index"
+					:key="child.id"
 					@click.stop="menuClick(child)"
 					:class="['menu-child-item', { 'permission-item': child.type === 3 }]"
 				>
