@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { useLoginStore } from '@/store/modules/login/login';
 import { ArrowUpBold, ArrowDownBold } from '@element-plus/icons-vue';
 import type { PropType } from 'vue';
@@ -8,6 +9,7 @@ import type { MenuResult } from '@/types/login';
 
 // 引入路由和store
 const router = useRouter();
+const route = useRoute();
 const loginStore = useLoginStore();
 
 const props = defineProps({
@@ -25,15 +27,61 @@ const props = defineProps({
 	}
 });
 
+// --------展开逻辑
 const isExpanded = ref(false);
+// 添加一个标志，记录是否有手动干预
+const manuallySet = ref(false);
 
+// 判断当前菜单是否应该折叠
+const autoExpand = computed(() => {
+	// 安全检查：确保URL存在
+	if (!props.item.url) return false;
+
+	// 1. 完全匹配
+	if (route.path === props.item.url) return true;
+
+	// 2. 子路径匹配
+	if (route.path.startsWith(props.item.url + '/')) return true;
+
+	// 如果都不匹配则保持关闭状态
+	return false;
+});
+
+// 最终的展开状态 - 结合自动和手动
+const shouldExpand = computed(() => {
+	// 如果用户手动设置了状态，优先使用手动设置的
+	if (manuallySet.value) {
+		return isExpanded.value;
+	}
+	// 否则使用自动判断的结果
+	return autoExpand.value;
+});
+
+// 手动折叠
 const toggleExpand = () => {
+	// console.log('设置');
 	if (props.item.children?.length) {
+		// 标记为手动设置
+		manuallySet.value = true;
+		// 切换状态
 		isExpanded.value = !isExpanded.value;
 	}
 };
 
-// 分割出来前端请求的icon名称
+// 监听路由变化
+watch(
+	() => route.path,
+	() => {
+		// 如果路由变化后应该自动展开当前菜单，则重置手动标记
+		if (autoExpand.value) {
+			manuallySet.value = false;
+		}
+	},
+	{ immediate: true }
+);
+
+// ----------菜单逻辑
+// 分割icon名称
 const sliceIconName = (name: string) => {
 	return name.replace(/^el-icon-/, '');
 };
@@ -115,7 +163,7 @@ const navigateToParentMenu = (parentId: number) => {
 <template>
 	<div class="menu-item-wrapper">
 		<!-- 父菜单项 -->
-		<div class="menu-parent-item" :class="{ 'menu-expanded': isExpanded }" @click="toggleExpand">
+		<div class="menu-parent-item" :class="{ 'menu-expanded': shouldExpand }" @click="toggleExpand">
 			<div class="menu-title">
 				<el-icon class="menu-icon" v-if="sliceIconName(item.icon || '')">
 					<component :is="sliceIconName(item.icon || '')" />
@@ -124,17 +172,17 @@ const navigateToParentMenu = (parentId: number) => {
 			</div>
 
 			<el-icon class="menu-arrow" v-show="!collapsed && item.children?.length">
-				<ArrowUpBold v-if="isExpanded" />
+				<ArrowUpBold v-if="shouldExpand" />
 				<ArrowDownBold v-else />
 			</el-icon>
 		</div>
 		<!-- 子菜单容器 -->
 		<Transition name="expand">
-			<div class="menu-children" v-show="isExpanded && !collapsed">
+			<div class="menu-children" v-show="shouldExpand && !collapsed">
 				<!-- 如果是叶子节点 -->
 				<div
 					v-if="!item.children?.[0]?.children?.length"
-					v-for="(child, index) in filteredChildren"
+					v-for="child in filteredChildren"
 					:key="child.id"
 					@click.stop="menuClick(child)"
 					:class="['menu-child-item', { 'permission-item': child.type === 3 }]"

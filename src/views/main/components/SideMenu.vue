@@ -1,13 +1,11 @@
 <script lang="ts" setup>
 import MenuItem from '@/components/MenuItem.vue';
-import { onMounted } from 'vue';
 
 import { useLoginStore } from '@/store/modules/login/login';
 import { storeToRefs } from 'pinia';
 
 const loginStore = useLoginStore();
 const { userMenus } = storeToRefs(loginStore);
-// const userMenus = loginStore.userMenus;
 
 const props = defineProps({
 	collapsed: {

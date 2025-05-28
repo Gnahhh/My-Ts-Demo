@@ -1,5 +1,10 @@
 <script lang="ts" setup>
-import { reactive, ref } from 'vue';
+import { reactive, ref, computed } from 'vue';
+import { useRoute } from 'vue-router';
+import { useLoginStore } from '@/store/modules/login/login';
+
+const route = useRoute();
+const loginStore = useLoginStore();
 
 const props = defineProps({
 	collapsed: {
@@ -16,6 +21,24 @@ const toggleSidebar = () => {
 };
 
 // 导航信息
+// 定义面包屑项目接口
+// interface BreadcrumbItem {
+// 	name: string;
+// 	path: string;
+// }
+// // 动态生成面包屑导航
+// const crumbList = computed(() => {
+// 	const crubs: BreadcrumbItem[] = [{ name: '首页', path: '/path' }];
+
+// 	// 获取当前路径
+// 	const currentPath = route.path;
+// 	if (currentPath === '/main') {
+// 		return crubs; // 如果就在首页，只返回首页面包屑
+// 	}
+
+// 	// 在菜单树中查找匹配路径
+// 	const menuPath = findMenuPath(loginStore.userMenus, currentPath);
+// });
 
 // 用户信息
 const informClick = () => {
