@@ -35,15 +35,25 @@ const manuallySet = ref(false);
 // 判断当前菜单是否应该折叠
 const autoExpand = computed(() => {
 	// 安全检查：确保URL存在
-	if (!props.item.url) return false;
+	if (!props.item.url) {
+		isExpanded.value = false;
+		return false;
+	}
 
 	// 1. 完全匹配
-	if (route.path === props.item.url) return true;
+	if (route.path === props.item.url) {
+		isExpanded.value = true;
+		return true;
+	}
 
 	// 2. 子路径匹配
-	if (route.path.startsWith(props.item.url + '/')) return true;
+	if (route.path.startsWith(props.item.url + '/')) {
+		isExpanded.value = true;
+		return true;
+	}
 
 	// 如果都不匹配则保持关闭状态
+	isExpanded.value = false;
 	return false;
 });
 
@@ -51,20 +61,25 @@ const autoExpand = computed(() => {
 const shouldExpand = computed(() => {
 	// 如果用户手动设置了状态，优先使用手动设置的
 	if (manuallySet.value) {
+		// console.log('用户手动展开');
 		return isExpanded.value;
 	}
 	// 否则使用自动判断的结果
+	// console.log('自动展开');
 	return autoExpand.value;
 });
 
 // 手动折叠
 const toggleExpand = () => {
-	// console.log('设置');
+	// console.log("手动展开")
 	if (props.item.children?.length) {
+		// console.log('手动展开判断');
 		// 标记为手动设置
 		manuallySet.value = true;
 		// 切换状态
+		// console.log(isExpanded.value);
 		isExpanded.value = !isExpanded.value;
+		// console.log(isExpanded.value);
 	}
 };
 
