@@ -27,7 +27,7 @@ const props = defineProps({
 	}
 });
 
-// --------展开逻辑
+// --------展开逻辑-------------
 const isExpanded = ref(false);
 // 添加一个标志，记录是否有手动干预
 const manuallySet = ref(false);

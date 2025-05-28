@@ -22,23 +22,65 @@ const toggleSidebar = () => {
 
 // 导航信息
 // 定义面包屑项目接口
-// interface BreadcrumbItem {
-// 	name: string;
-// 	path: string;
-// }
-// // 动态生成面包屑导航
-// const crumbList = computed(() => {
-// 	const crubs: BreadcrumbItem[] = [{ name: '首页', path: '/path' }];
+interface BreadcrumbItem {
+	name: string;
+	path: string;
+}
 
-// 	// 获取当前路径
-// 	const currentPath = route.path;
-// 	if (currentPath === '/main') {
-// 		return crubs; // 如果就在首页，只返回首页面包屑
-// 	}
+// 通过route来生成面包屑导航
+const breadcrumbList = computed(() => {
+	// 始终包含首页作为第一个面包屑项
+	const breadcrumbs: BreadcrumbItem[] = [{ name: '首页', path: '/main' }];
 
-// 	// 在菜单树中查找匹配路径
-// 	const menuPath = findMenuPath(loginStore.userMenus, currentPath);
-// });
+	// 如果当前就在首页，只返回首页面包屑
+	if (route.path === '/main') {
+		return breadcrumbs;
+	}
+
+	// 如果是其他就动态生成匹配
+	const pathSegments = route.path.split('/').filter(Boolean);
+
+	// 如果是第一段是main,则跳过
+	const segmentsToProcess = pathSegments[0] === 'main' ? pathSegments.slice(1) : pathSegments;
+
+	// 依次构建每一级路径
+	let currentFullPath = '/main';
+
+	// 遍历出来除了main之后的所有path
+	for (const segment of segmentsToProcess) {
+		currentFullPath = `${currentFullPath}/${segment}`;
+
+		// 在用户菜单中查找匹配项
+		const matchedMenu = findMenuByPath(loginStore.userMenus, currentFullPath);
+
+		// 通过menu来构建面包屑
+		const breadcrumbName = matchedMenu ? matchedMenu.name : '默认';
+
+		breadcrumbs.push({
+			name: breadcrumbName,
+			path: currentFullPath
+		});
+	}
+	return breadcrumbs;
+});
+
+// 在菜单中查找匹配路径的菜单项
+const findMenuByPath = (menus: any[], path: string): any | null => {
+	for (const menu of menus) {
+		// 检查当前菜单
+		if (menu.url === path) {
+			return menu;
+		}
+
+		// 检查子菜单
+		if (menu.children && menu.children.length) {
+			const found = findMenuByPath(menu.children, path);
+			if (found) return found;
+		}
+	}
+
+	return null;
+};
 
 // 用户信息
 const informClick = () => {
@@ -70,9 +112,9 @@ const showUserMenu = ref(false);
 			</div>
 			<div class="crumb">
 				<el-breadcrumb separator="/">
-					<el-breadcrumb-item :to="{ path: '/abc' }">homepage</el-breadcrumb-item>
-					<el-breadcrumb-item :to="{ path: '/efg' }">homepage1</el-breadcrumb-item>
-					<el-breadcrumb-item :to="{ path: '/home' }">homepage2</el-breadcrumb-item>
+					<el-breadcrumb-item v-for="(item, index) in breadcrumbList" :key="index" :to="item.path">
+						{{ item.name }}
+					</el-breadcrumb-item>
 				</el-breadcrumb>
 			</div>
 		</div>
