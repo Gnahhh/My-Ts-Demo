@@ -250,6 +250,7 @@ const showUserMenu = ref(false);
 				border-radius: 4px;
 				background-color: white;
 				box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1); /* 添加阴影增加层次感 */
+				z-index: 1;
 
 				/* 添加连接桥梁，扩大可点击区域 */
 				&::before {
