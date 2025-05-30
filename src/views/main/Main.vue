@@ -27,7 +27,6 @@ const isCollapsed = ref(false);
 	.sider {
 		width: 12.5rem;
 		height: 100%;
-		// background-color: red;
 		transition: all 0.3s;
 
 		&.sider-collapsed {
@@ -35,27 +34,15 @@ const isCollapsed = ref(false);
 		}
 	}
 
-	// 平板设备断点
-	// @media (max-width: 992px) {
-	// 	.sider {
-	// 		width: 80px;
-
-	// 		&.sider-collapsed {
-	// 			width: 0;
-	// 			overflow: hidden;
-	// 		}
-	// 	}
-	// }
-
 	.right-content {
 		display: flex;
 		flex-direction: column;
 		flex: 1;
-		// background-color: skyblue;
+		overflow: hidden;
 
 		.content {
 			flex: 1;
-			background-color: pink;
+			overflow-y: auto;
 		}
 	}
 }

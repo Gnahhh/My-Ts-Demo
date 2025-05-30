@@ -109,7 +109,7 @@ const onSubmit = () => {
 			<el-form-item label="状态" prop="status">
 				<el-select v-model="formInline.status" placeholder="请选择状态">
 					<el-option label="启用" value="0" />
-					<el-option label="拉黑" value="1" />
+					<el-option label="禁用" value="1" />
 				</el-select>
 			</el-form-item>
 			<el-form-item label="选择时间" prop="date">
@@ -134,6 +134,14 @@ const onSubmit = () => {
 </template>
 
 <style lang="less" scoped>
+.search-form {
+	background-color: #fff;
+	border-radius: 8px;
+	padding: 24px;
+	margin-bottom: 16px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	border: 1px solid #e5e7eb;
+}
 .demo-form-inline {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
@@ -150,6 +158,7 @@ const onSubmit = () => {
 		justify-self: end; // 在网格区域内右对齐
 
 		.el-button {
+			// margin-right: 1.25rem;
 			padding: 0.5rem 0.65rem;
 		}
 	}

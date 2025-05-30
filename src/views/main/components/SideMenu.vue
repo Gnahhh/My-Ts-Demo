@@ -33,6 +33,7 @@ const props = defineProps({
 <style lang="less" scoped>
 .side-menu {
 	display: flex;
+	flex-shrink: 0;
 	flex-direction: column;
 	align-items: center;
 	background-color: @color-primary-dark;

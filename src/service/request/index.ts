@@ -24,7 +24,6 @@ class HRequest {
 		this.instance.interceptors.response.use(
 			res => {
 				// console.log('实例-> 全局的响应成功的拦截：');
-				//  res.data => promise的res类型有问题 ： 通过泛型解决
 				return res.data;
 			},
 			err => {
