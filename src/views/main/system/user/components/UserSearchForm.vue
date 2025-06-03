@@ -144,11 +144,11 @@ const onSubmit = () => {
 }
 .demo-form-inline {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 18.75rem), 1fr));
 
 	:deep(.el-form-item) {
 		display: grid;
-		grid-template-columns: 7.5rem minmax(13.75rem, 1fr); // 标签固定宽度120px，输入框占剩余空间
+		grid-template-columns: 7.5rem minmax(min(100%, 12.5rem), 1fr); // 标签固定宽度120px，输入框占剩余空间
 	}
 
 	// 按钮区域的特殊样式

@@ -1,13 +1,13 @@
 <script lang="ts" setup>
+import { ref, computed } from 'vue';
 import dayjs from 'dayjs';
 import { storeToRefs } from 'pinia';
 import useSystemStore from '@/store/modules/main/system/system';
 import { Edit, Delete } from '@element-plus/icons-vue';
 
 const systemStore = useSystemStore();
-systemStore.getUserList();
 
-const { userLists } = storeToRefs(systemStore);
+const { userLists, userAmount } = storeToRefs(systemStore);
 
 // 字段映射配置
 const columnMapping = {
@@ -35,19 +35,56 @@ const formatDate = (dateString: string) => {
 	return dayjs(dateString).format('YYYY-MM-DD HH:mm:ss');
 };
 
-// const columns = Object.entries(columnMapping).map(([key, label]) => ({
-// 	prop: key,
-// 	label
-// }));
-
 // 按钮操作
+// 修改用户按钮
 const editUser = () => {
 	console.log('修改');
 };
 
+// 删除用户按钮
 const delUser = () => {
 	console.log('删除');
 };
+
+// 分页功能
+// 分页状态
+const currentPage = ref(1);
+const pageSize = ref(10);
+
+// 缓存当前请求的页码
+const requestedPages = ref(new Set<number>());
+
+// 获取用户列表数据
+const fetchUserList = async (searchParams?: any) => {
+	try {
+		// 当当前请求有缓存的时候 就不再重复请求
+		if (requestedPages.value.has(currentPage.value)) return;
+		await systemStore.getUserList({
+			offset: (currentPage.value - 1) * pageSize.value,
+			size: pageSize.value,
+			...searchParams // 支持搜索参数
+		});
+		requestedPages.value.add(currentPage.value);
+	} catch (error) {
+		console.error('获取用户列表失败:', error);
+	}
+};
+
+// 获取当前的页码的数据
+const currentChange = (page: number) => {
+	currentPage.value = page;
+	fetchUserList();
+};
+
+// 展示分页数据
+const currentPageUsers = computed(() => {
+	const start = (currentPage.value - 1) * pageSize.value;
+	const end = start + pageSize.value;
+	return userLists.value.slice(start, end);
+});
+
+// 初始化数据
+fetchUserList();
 </script>
 
 <template>
@@ -57,7 +94,7 @@ const delUser = () => {
 			<div class="function"><el-button type="primary">新建数据</el-button></div>
 		</div>
 		<div class="content">
-			<el-table :data="userLists">
+			<el-table :data="currentPageUsers">
 				<!-- 序号列 -->
 				<el-table-column type="index" label="序号" />
 				<el-table-column
@@ -77,6 +114,7 @@ const delUser = () => {
 						</el-tag>
 					</template>
 				</el-table-column>
+				<!-- 操作按钮 -->
 				<el-table-column label="操作" header-align="center">
 					<template #default>
 						<el-button link type="primary" :icon="Edit" size="small" @click="editUser">
@@ -88,12 +126,23 @@ const delUser = () => {
 					</template>
 				</el-table-column>
 			</el-table>
+			<!-- 分页 -->
+			<el-pagination
+				:current-page="currentPage"
+				:page-size="pageSize"
+				:total="userAmount"
+				@current-change="currentChange"
+				background
+				layout="prev, pager, next"
+				class="pagination"
+			/>
 		</div>
 	</div>
 </template>
 
 <style lang="less" scoped>
 .user-list {
+	// 头
 	.header {
 		display: flex;
 		justify-content: space-between;
@@ -104,9 +153,11 @@ const delUser = () => {
 		}
 	}
 
+	// 内容
 	.content {
 		overflow: auto;
 
+		// 表格样式
 		.el-table {
 			width: 100%;
 
@@ -116,6 +167,12 @@ const delUser = () => {
 					width: auto !important;
 				}
 			}
+		}
+
+		// 居中对齐
+		.pagination {
+			margin-top: 1.25rem;
+			justify-content: center;
 		}
 	}
 }

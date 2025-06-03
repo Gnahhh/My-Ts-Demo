@@ -1,11 +1,19 @@
 import hRequest from '@/service';
 
-export const fetchUserList = function () {
+interface FetchUserListParams {
+	offset: number;
+	size: number;
+	// 其他搜索参数
+	name?: string;
+	status?: number;
+}
+
+export const fetchUserList = function (params: FetchUserListParams) {
 	return hRequest.post({
 		url: '/users/list',
 		data: {
-			offset: 0,
-			size: 10
+			offset: params.offset ?? 0,
+			size: params.size ?? 10
 		}
 	});
 };
