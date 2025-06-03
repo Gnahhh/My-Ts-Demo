@@ -252,23 +252,21 @@ fetchUserList();
 		background: #ffffff;
 		border-radius: 12px;
 		box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-		overflow: hidden;
+		// overflow: hidden;
 		border: 1px solid #f1f5f9;
 
 		// 表格样式
-		.el-table {
+		:deep(.el-table) {
 			width: 100%;
 			border-radius: 8px 8px 0 0;
+			// overflow: hidden;
 
-			// 确保表格自适应容器宽度
-			:deep(colgroup) {
-				col {
-					width: auto !important;
-				}
+			.el-table__cell {
+				overflow: hidden;
 			}
 		}
 
-		// 🔥 分页容器样式 - 右对齐设计
+		// 分页容器样式 - 右对齐设计
 		.pagination-container {
 			display: flex;
 			justify-content: space-between;
