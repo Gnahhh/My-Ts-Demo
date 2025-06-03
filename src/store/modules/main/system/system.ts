@@ -27,6 +27,11 @@ const useSystemStore = defineStore('system', {
 			const { list, totalCount } = res.data;
 			this.userAmount = totalCount;
 			this.userLists.push(...list);
+		},
+		// 清除
+		clearUserList() {
+			this.userLists = [];
+			this.userAmount = 0;
 		}
 	}
 });

@@ -135,16 +135,35 @@ const onSubmit = () => {
 
 <style lang="less" scoped>
 .search-form {
-	background-color: #fff;
-	border-radius: 8px;
-	padding: 24px;
-	margin-bottom: 16px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-	border: 1px solid #e5e7eb;
+	background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+	border-radius: 12px;
+	padding: 28px;
+	margin-bottom: 20px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+	border: 1px solid #e2e8f0;
+	position: relative;
+	overflow: hidden;
+	transition: all 0.3s ease;
+
+	// 🔥 添加装饰性边框
+	&::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 4px;
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	}
+
+	&:hover {
+		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+		transform: translateY(-2px);
+	}
 }
 .demo-form-inline {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(min(100%, 18.75rem), 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
 
 	:deep(.el-form-item) {
 		display: grid;
@@ -156,10 +175,60 @@ const onSubmit = () => {
 		display: flex;
 		grid-column: 1 / -1; // 从第一列延伸到最后一列
 		justify-self: end; // 在网格区域内右对齐
+		gap: 12px;
+		margin-top: 8px;
 
 		.el-button {
-			// margin-right: 1.25rem;
-			padding: 0.5rem 0.65rem;
+			border-radius: 8px;
+			padding: 10px 20px;
+			font-weight: 600;
+			font-size: 14px;
+			transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+			display: flex;
+			align-items: center;
+			gap: 6px;
+
+			// 按钮样式
+			&:not(.el-button--primary) {
+				background: #f8fafc;
+				border: 1px solid #e2e8f0;
+				color: #64748b;
+				box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+				&:hover {
+					background: #f1f5f9;
+					border-color: #cbd5e1;
+					color: #475569;
+					transform: translateY(-1px);
+					box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+				}
+
+				&:active {
+					transform: translateY(0);
+				}
+			}
+
+			// 🔥 查询按钮样式
+			&.el-button--primary {
+				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+				border: none;
+				box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+
+				&:hover {
+					background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+					transform: translateY(-2px);
+					box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+				}
+
+				&:active {
+					transform: translateY(0);
+				}
+			}
+
+			// 图标样式
+			.el-icon {
+				font-size: 14px;
+			}
 		}
 	}
 }
